@@ -1,0 +1,22 @@
+package kr.ac.kopo.ui;
+
+import java.util.Scanner;
+
+public class BaseUI {
+	
+	private Scanner sc;
+	
+	public BaseUI() {
+		sc = new Scanner(System.in);
+	}
+	
+	private String scanStr(String msg) {
+		System.out.println(msg);
+		return sc.nextLine();
+	}
+	
+	protected int scanInt(String msg) {
+		return Integer.parseInt(scanStr(msg));
+	}
+
+}

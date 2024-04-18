@@ -1,0 +1,9 @@
+package kr.ac.kopo.day13;
+
+import java.io.InputStream;
+
+public class FileIOMain01 {
+	
+	System.out.println("문자를 입력하세요 ctrl+z입력시 종료");
+	InputStream is = System.in;
+	}

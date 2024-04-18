@@ -1,0 +1,51 @@
+package kr.ac.kopo.util;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.Scanner;
+
+import kr.ac.kopo.util.ConnectionFactory;
+import kr.ac.kopo.util.JDBCClose;
+
+public class PrnEmpSalaryHW {
+	
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("급여를 입력하세요 : ");
+		String sal = sc.nextLine();
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			
+			conn = new ConnectionFactory().getConnection();
+			String sql = "select m2.job_title, avg(m1.salary) as avgsal"
+					+ "from employees m1 join jobs m2 on m1.job_id = m2.job_id"
+					+ "where m1.salary >= to_number(?) "
+					+ "group by m2.job_title "
+					+ "order by sal desc";
+			pstmt = conn.prepareStatement(sal);
+			pstmt.setString(1, sql);
+			
+			int cnt = pstmt.executeUpdate();
+			
+			ResultSet rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				String job_title = rs.getString("job_tltle");
+				String avgsql = rs.getString("avgsal");
+				String avgsal;
+				System.out.println("(" + job_title +") " + avgsql);
+				
+			}
+			
+			System.out.println("총 [" + cnt + "]명이 검색되었습니다 : ");
+		} catch (Exception e) {
+			e.printStackTrace();			
+		} finally {
+			JDBCClose.close(conn, pstmt);
+		}
+	}
+}

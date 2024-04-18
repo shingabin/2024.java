@@ -1,0 +1,39 @@
+package kr.ac.kopo.jdbc;
+
+import java.sql.*;
+import java.util.Scanner;
+
+public class PrnEmpSalary {
+
+    private static final String URL = "jdbc:oracle:thin:@localhost:1521:xe";
+    private static final String USER = "scott";
+    private static final String PASSWORD = "tiger";
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("급여를 입력하시오 : ");
+        int salary = scanner.nextInt();
+
+        try (
+            Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(
+                "SELECT job_title, AVG(salary) AS avg_salary "
+                    + "FROM employees "
+                    + "WHERE salary >= " + salary
+                    + " GROUP BY job_title "
+                    + "ORDER BY avg_salary DESC"
+            )
+        ) {
+            int count = 0;
+            while (resultSet.next()) {
+                count++;
+                System.out.printf("[%s] %d\n", resultSet.getString("job_title"), resultSet.getInt("avg_salary"));
+            }
+            System.out.println("총 [" + count + "]명이 검색되었습니다");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
