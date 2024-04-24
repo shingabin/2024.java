@@ -191,5 +191,48 @@ public class NaverDAO{
 		
 		return lists;
 	}
+
+    public List<NaverDTO> getLogin(String id, String password){
+
+        List<NaverDTO>lists = new ArrayList<NaverDTO>();
+        Connection conn = DBConn.getConnection();
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        String sql;
+
+        try {
+            sql = "select id,pw,name,gender,birth,email,tel ";
+            sql+= "from naverMember where id=? and pw=?";
+
+            pstmt = conn.prepareStatement(sql);
+
+            pstmt.setString(1, id);
+            pstmt.setString(2, password);
+
+            rs= pstmt.executeQuery();
+
+            while(rs.next()) {
+                NaverDTO dto = new NaverDTO();
+
+                dto.setId(rs.getString("id"));
+                dto.setPw(rs.getString("pw"));
+                dto.setName(rs.getString("name"));
+                dto.setGender(rs.getString("gender"));
+                dto.setBirth(rs.getString("birth"));
+                dto.setEmail(rs.getString("email"));
+                dto.setTel(rs.getString("tel"));
+
+                lists.add(dto);
+            }
+
+            rs.close();
+            pstmt.close();
+
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+
+        return lists;
+    }
 	
 }

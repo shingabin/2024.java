@@ -67,7 +67,7 @@ public class NaverException {
 	public void phoneCheck(String phone) throws AuthenException{
 		boolean check = Pattern.matches("(010|011|016|017|018?019)-(\\d{3,4})-(\\d{4})", phone);
 		if(!check)
-			throw new AuthenException("전화번호 입력방식은 [XXX-XXXX-XXXX]입니다");
+			throw new AuthenException("전화번호 입력방식은 [XXX-XXXX-XXXX]입니다" );
 	}
 	
 }	
